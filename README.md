@@ -1,2 +1,2 @@
-# error_logger
+# Error Logger
 Error logging using django middleware
