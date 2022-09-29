@@ -6,7 +6,7 @@ from error_logger.utils import CustomPagination
 from .serializers import ErrorSerializer
 from .models import Error
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 from rest_framework.mixins import (
@@ -16,7 +16,7 @@ from rest_framework.mixins import (
     DestroyModelMixin,
     ListModelMixin,
 )
-
+from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
 
 
@@ -33,6 +33,9 @@ class ErrorView(
     permission_classes = [IsAuthenticatedOrReadOnly]
     authentication_classes = [BasicAuthentication, SessionAuthentication]
     pagination_class = CustomPagination
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
+    filterset_fields = ['status_code', 'method']
+    search_fields = ['error','status_code', 'method']
 
     def get(self, request, *args, **kwargs):
         many, queryset = True, self.filter_queryset(self.get_queryset())
